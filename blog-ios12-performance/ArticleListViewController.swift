@@ -15,6 +15,10 @@ final class ArticleListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        Network.loadTopHeadlines { (response) in
+            print(response.totalResults)
+        }
+        
         let url = URL(string: "https://www.stripes.com/polopoly_fs/1.531847.1528489228!/image/image.jpg_gen/derivatives/landscape_490/image.jpg")!
         let model = TempModel(imageURL: url, date: "2018-06-08T21:06:54Z", body: "The Air Force grounded all B-1B Lancer heavy bombers as of Thursday to conduct a fleet-wide safety investigation in the wake of an emergency landing by a Lancer last month.")
         self.articles = Array(repeating: model, count: 100)
