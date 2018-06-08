@@ -5,73 +5,96 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Latest Headlines-->
-        <scene sceneID="xDb-pw-3kg">
+        <!--Top Headlines-->
+        <scene sceneID="0Fj-Mp-8Z9">
             <objects>
-                <tableViewController id="KkW-k6-jhV" customClass="ArticleListViewController" customModule="blog_ios12_performance" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="fMs-FV-E0u">
+                <viewController title="Top Headlines" id="k3a-dB-g2p" customClass="ArticleListViewController" customModule="blog_ios12_performance" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1h5-TB-orj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="article_cell" rowHeight="449" id="4sy-7i-QMQ" customClass="ArticleCell" customModule="blog_ios12_performance" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="449"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4sy-7i-QMQ" id="Tho-vO-3I6">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="448.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ozo-1f-ffl">
-                                            <rect key="frame" x="30" y="30" width="315" height="323.5"/>
+                        <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="qB8-LW-MbP">
+                                <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fMs-FV-E0u">
+                                <rect key="frame" x="0.0" y="116" width="375" height="551"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="article_cell" rowHeight="449" id="4sy-7i-QMQ" customClass="ArticleCell" customModule="blog_ios12_performance" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="449"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4sy-7i-QMQ" id="Tho-vO-3I6">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="448.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UNA-2l-zZy">
-                                                    <rect key="frame" x="0.0" y="0.0" width="315" height="160"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="160" id="QJe-At-zAO"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5/7/10 8:30PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqm-gp-7go">
-                                                    <rect key="frame" x="0.0" y="170" width="315" height="14.5"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PNa-1F-KYZ">
-                                                    <rect key="frame" x="0.0" y="194.5" width="315" height="129"/>
-                                                    <string key="text">The Air Force grounded all B-1B Lancer heavy bombers as of Thursday to conduct a fleet-wide safety investigation in the wake of an emergency landing by a Lancer last month.</string>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ozo-1f-ffl">
+                                                    <rect key="frame" x="30" y="30" width="315" height="323.5"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UNA-2l-zZy">
+                                                            <rect key="frame" x="0.0" y="0.0" width="315" height="160"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="160" id="QJe-At-zAO"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5/7/10 8:30PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqm-gp-7go">
+                                                            <rect key="frame" x="0.0" y="170" width="315" height="14.5"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PNa-1F-KYZ">
+                                                            <rect key="frame" x="0.0" y="194.5" width="315" height="129"/>
+                                                            <string key="text">The Air Force grounded all B-1B Lancer heavy bombers as of Thursday to conduct a fleet-wide safety investigation in the wake of an emergency landing by a Lancer last month.</string>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
                                             </subviews>
-                                        </stackView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="ozo-1f-ffl" firstAttribute="top" secondItem="Tho-vO-3I6" secondAttribute="top" constant="30" id="3FV-L7-XOe"/>
-                                        <constraint firstItem="ozo-1f-ffl" firstAttribute="leading" secondItem="Tho-vO-3I6" secondAttribute="leading" constant="30" id="iWn-Vr-df2"/>
-                                        <constraint firstAttribute="trailing" secondItem="ozo-1f-ffl" secondAttribute="trailing" constant="30" id="jaI-vr-6H8"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ozo-1f-ffl" secondAttribute="bottom" constant="30" id="kYq-Zk-Jmx"/>
-                                    </constraints>
-                                </tableViewCellContentView>
+                                            <constraints>
+                                                <constraint firstItem="ozo-1f-ffl" firstAttribute="top" secondItem="Tho-vO-3I6" secondAttribute="top" constant="30" id="3FV-L7-XOe"/>
+                                                <constraint firstItem="ozo-1f-ffl" firstAttribute="leading" secondItem="Tho-vO-3I6" secondAttribute="leading" constant="30" id="iWn-Vr-df2"/>
+                                                <constraint firstAttribute="trailing" secondItem="ozo-1f-ffl" secondAttribute="trailing" constant="30" id="jaI-vr-6H8"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ozo-1f-ffl" secondAttribute="bottom" constant="30" id="kYq-Zk-Jmx"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="bodyLabel" destination="PNa-1F-KYZ" id="CVX-Tc-4ET"/>
+                                            <outlet property="dateLabel" destination="iqm-gp-7go" id="cU7-bb-v6E"/>
+                                            <outlet property="mediaImageView" destination="UNA-2l-zZy" id="meE-UL-wC1"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
-                                    <outlet property="bodyLabel" destination="PNa-1F-KYZ" id="CVX-Tc-4ET"/>
-                                    <outlet property="dateLabel" destination="iqm-gp-7go" id="cU7-bb-v6E"/>
-                                    <outlet property="mediaImageView" destination="UNA-2l-zZy" id="meE-UL-wC1"/>
+                                    <outlet property="dataSource" destination="k3a-dB-g2p" id="SH6-rA-knD"/>
                                 </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="KkW-k6-jhV" id="5Xd-uR-uOw"/>
-                            <outlet property="delegate" destination="KkW-k6-jhV" id="mXP-ZY-VBG"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Latest Headlines" id="T14-nb-S4k"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jq4-1c-Bh5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="fMs-FV-E0u" secondAttribute="trailing" id="5PQ-Yf-uvi"/>
+                            <constraint firstItem="qB8-LW-MbP" firstAttribute="centerY" secondItem="1h5-TB-orj" secondAttribute="centerY" id="5WF-uu-vWK"/>
+                            <constraint firstAttribute="bottom" secondItem="fMs-FV-E0u" secondAttribute="bottom" id="Jzh-9y-eGo"/>
+                            <constraint firstItem="qB8-LW-MbP" firstAttribute="centerX" secondItem="1h5-TB-orj" secondAttribute="centerX" id="LFC-pu-wsj"/>
+                            <constraint firstItem="fMs-FV-E0u" firstAttribute="top" secondItem="c57-F2-eAd" secondAttribute="top" id="PGY-Fr-FPT"/>
+                            <constraint firstItem="fMs-FV-E0u" firstAttribute="leading" secondItem="1h5-TB-orj" secondAttribute="leading" id="hod-OY-2qQ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="c57-F2-eAd"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Top Headlines" id="3IO-K5-nHg"/>
+                    <connections>
+                        <outlet property="spinner" destination="qB8-LW-MbP" id="bxo-5s-ad9"/>
+                        <outlet property="tableView" destination="fMs-FV-E0u" id="gp8-JG-Lym"/>
+                        <outlet property="view" destination="1h5-TB-orj" id="7FD-bG-nRr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="peL-Ii-8Vo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-735.20000000000005" y="-583.3583208395803"/>
+            <point key="canvasLocation" x="-914" y="-583"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sAe-6G-boN">
@@ -82,7 +105,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="KkW-k6-jhV" kind="relationship" relationship="rootViewController" id="elV-c2-Qr7"/>
+                        <segue destination="k3a-dB-g2p" kind="relationship" relationship="rootViewController" id="ajy-Ob-pp2"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kd5-lf-64l" userLabel="First Responder" sceneMemberID="firstResponder"/>

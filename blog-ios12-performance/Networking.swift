@@ -21,12 +21,12 @@ struct Article: Decodable {
     }
     
     let source: Source
-    let author: String
-    let title: String
-    let description: String
-    let url: URL
-    let urlToImage: URL
-    let publishedAt: Date
+    let author: String?
+    let title: String?
+    let description: String?
+    let url: URL?
+    let urlToImage: URL?
+    let publishedAt: String?
 }
 
 private func urlRequest(for url: URL) -> URLRequest {
@@ -49,6 +49,9 @@ struct Network {
     static func loadTopHeadlines(completion: @escaping (ArticlesResponse) -> Void) {
         let url = URL(string: "https://newsapi.org/v2/top-headlines?q=apple")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { (data, urlResponse, error) in
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                print(responseString)
+            }
             guard let response = articlesResponse(from: data) else {
                 return
             }
@@ -60,9 +63,11 @@ struct Network {
         guard let data = data else { return nil }
         do {
             return try JSONDecoder().decode(ArticlesResponse.self, from: data)
-        } catch {
-            return nil
+        } catch let e {
+            print("\(e)")
         }
+        
+        return nil
     }
 }
 
