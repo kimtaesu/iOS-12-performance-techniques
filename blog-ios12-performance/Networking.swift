@@ -54,7 +54,7 @@ struct Network {
     }
     
     static func loadTopHeadlines(query: String, completion: @escaping (ArticlesResponse) -> Void) {
-        let url = URL(string: "https://newsapi.org/v2/top-headlines")!
+        let url = URL(string: "https://newsapi.org/v2/top-headlines?q=\(query)")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { (data, urlResponse, error) in
             guard let data = data else {
                 // TODO: Handle errors
