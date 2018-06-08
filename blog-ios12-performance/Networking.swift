@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AllArticlesResponse: Decodable {
+struct ArticlesResponse: Decodable {
     let status: String
     let totalResults: Int
     let articles: [Article]
@@ -36,7 +36,7 @@ private func urlRequest(for url: URL) -> URLRequest {
 }
 
 struct Network {
-    static func loadAllArticles(query: String, completion: @escaping (AllArticlesResponse) -> Void) {
+    static func loadAllArticles(query: String, completion: @escaping (ArticlesResponse) -> Void) {
         let url = URL(string: "https://newsapi.org/v2/everything?q=\(query)")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { data, urlResponse, error in
             guard let data = data else {
@@ -45,12 +45,29 @@ struct Network {
             }
             
             do {
-                let articlesResponse = try JSONDecoder().decode(AllArticlesResponse.self, from: data)
+                let articlesResponse = try JSONDecoder().decode(ArticlesResponse.self, from: data)
                 completion(articlesResponse)
             } catch {
                 // TODO: Handle errors
             }
         }
+    }
+    
+    static func loadTopHeadlines(query: String, completion: @escaping (ArticlesResponse) -> Void) {
+        let url = URL(string: "https://newsapi.org/v2/top-headlines")!
+        URLSession.shared.dataTask(with: urlRequest(for: url)) { (data, urlResponse, error) in
+            guard let data = data else {
+                // TODO: Handle errors
+                return
+            }
+            
+            do {
+                let articlesResponse = try JSONDecoder().decode(ArticlesResponse.self, from: data)
+                completion(articlesResponse)
+            } catch {
+                // TODO: Handle errors
+            }
+        }.resume()
     }
 }
 
