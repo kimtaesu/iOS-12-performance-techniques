@@ -39,35 +39,30 @@ struct Network {
     static func loadAllArticles(query: String, completion: @escaping (ArticlesResponse) -> Void) {
         let url = URL(string: "https://newsapi.org/v2/everything?q=\(query)")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { data, urlResponse, error in
-            guard let data = data else {
-                // TODO: Handle errors
+            guard let response = articlesResponse(from: data) else {
                 return
             }
-            
-            do {
-                let articlesResponse = try JSONDecoder().decode(ArticlesResponse.self, from: data)
-                completion(articlesResponse)
-            } catch {
-                // TODO: Handle errors
-            }
+            completion(response)
         }
     }
     
     static func loadTopHeadlines(query: String, completion: @escaping (ArticlesResponse) -> Void) {
         let url = URL(string: "https://newsapi.org/v2/top-headlines?q=\(query)")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { (data, urlResponse, error) in
-            guard let data = data else {
-                // TODO: Handle errors
+            guard let response = articlesResponse(from: data) else {
                 return
             }
-            
-            do {
-                let articlesResponse = try JSONDecoder().decode(ArticlesResponse.self, from: data)
-                completion(articlesResponse)
-            } catch {
-                // TODO: Handle errors
-            }
+            completion(response)
         }.resume()
+    }
+    
+    private static func articlesResponse(from data: Data?) -> ArticlesResponse? {
+        guard let data = data else { return nil }
+        do {
+            return try JSONDecoder().decode(ArticlesResponse.self, from: data)
+        } catch {
+            return nil
+        }
     }
 }
 
