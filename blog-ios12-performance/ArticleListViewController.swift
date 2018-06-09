@@ -13,13 +13,21 @@ final class ArticleListViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var spinner: UIActivityIndicatorView!
     
-    var articles: [Article] = []
+    private(set) var articles: [Article]
+    
+    init(articles: [Article]) {
+        self.articles = articles
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.articles = DiskCache.loadAll(type: Article.self)
-        self.tableView.reloadData()
+        self.title = "Top Headlines"
+        self.tableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: ArticleCell.reuseID)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,9 +37,15 @@ final class ArticleListViewController: UIViewController {
     }
     
     func reloadArticles() {
+        // Update from cache
+        self.articles = DiskCache.loadAll(type: Article.self)
+        self.tableView.reloadData()
+        
         if self.articles.isEmpty {
             self.spinner.startAnimating()
         }
+        
+        // Update from network
         Network.loadTopHeadlines(completion: { response in
             response.articles.forEach({
                 DiskCache.save(model: $0, key: $0.cacheKey())
@@ -59,46 +73,5 @@ extension ArticleListViewController : UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
         cell.configureWith(article: self.articles[indexPath.row])
         return cell
-    }
-}
-
-final class ArticleCell : UITableViewCell {
-    static let reuseID = "article_cell"
-    
-    @IBOutlet var mediaImageView: UIImageView!
-    @IBOutlet var dateLabel: UILabel!
-    @IBOutlet var bodyLabel: UILabel!
-    
-    private var loadingURL: URL?
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.loadingURL = nil
-    }
-    
-    func configureWith(article: Article) {
-        self.bodyLabel.text = article.title
-        self.dateLabel.text = configuredDate(using: article.publishedAt)
-        
-        self.loadingURL = nil
-        self.mediaImageView.image = nil
-        
-        if let url = article.urlToImage {
-            self.loadingURL = url
-            ImageLoader.load(url: url, completion: { url, image in
-                if url == self.loadingURL {
-                    self.mediaImageView.image = image
-                }
-            })
-        }
-    }
-    
-    func configuredDate(using string: String?) -> String {
-        guard let string = string else { return "No Date Provided" }
-        let isoDateFormatter = ISO8601DateFormatter()
-        guard let date = isoDateFormatter.date(from: string) else { return "Invalid Date" }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        return dateFormatter.string(from: date)
     }
 }

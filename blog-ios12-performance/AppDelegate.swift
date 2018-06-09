@@ -12,11 +12,25 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var rootViewController: UIViewController?
+    var rootNavViewController: UINavigationController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         self.configureAppearance()
+        
+        let articles = DiskCache.loadAll(type: Article.self)
+        
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        let vc = ArticleListViewController(articles: articles)
+        let nav = UINavigationController(rootViewController: vc)
+        
+        window.rootViewController = nav
+        window.makeKeyAndVisible()
+        
+        self.window = window
+        self.rootViewController = vc
+        self.rootNavViewController = nav
         
         return true
     }
@@ -44,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func configureAppearance() {
+        UINavigationBar.appearance().prefersLargeTitles = true
         UINavigationBar.appearance().barTintColor = UIColor(red: 8/255, green: 164/255, blue: 126/255, alpha: 1)
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [
