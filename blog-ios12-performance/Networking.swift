@@ -40,18 +40,9 @@ private func urlRequest(for url: URL) -> URLRequest {
 }
 
 struct Network {
-    static func loadAllArticles(completion: @escaping (ArticlesResponse) -> Void) {
-        let url = URL(string: "https://newsapi.org/v2/everything?q=apple")!
-        URLSession.shared.dataTask(with: urlRequest(for: url)) { data, urlResponse, error in
-            guard let response = articlesResponse(from: data) else {
-                return
-            }
-            completion(response)
-        }
-    }
     
     static func loadTopHeadlines(completion: @escaping (ArticlesResponse) -> Void) {
-        let url = URL(string: "https://newsapi.org/v2/top-headlines?q=apple")!
+        let url = URL(string: "https://newsapi.org/v2/top-headlines?country=us")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { (data, urlResponse, error) in
             guard let response = articlesResponse(from: data) else {
                 return
