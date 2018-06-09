@@ -24,7 +24,11 @@ final class ArticleCell : UITableViewCell {
     
     func configureWith(article: Article) {
         self.bodyLabel.text = article.title
-        self.dateLabel.text = configuredDate(using: article.publishedAt)
+        if let publishedDate = article.publishedAtDate {
+            self.dateLabel.text = configuredString(using: publishedDate)
+        } else {
+            self.dateLabel.text = "Invalid Date"
+        }
         
         self.loadingURL = nil
         self.mediaImageView.image = nil
@@ -39,10 +43,7 @@ final class ArticleCell : UITableViewCell {
         }
     }
     
-    func configuredDate(using string: String?) -> String {
-        guard let string = string else { return "No Date Provided" }
-        let isoDateFormatter = ISO8601DateFormatter()
-        guard let date = isoDateFormatter.date(from: string) else { return "Invalid Date" }
+    func configuredString(using date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         return dateFormatter.string(from: date)

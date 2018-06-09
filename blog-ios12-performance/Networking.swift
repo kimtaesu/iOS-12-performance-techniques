@@ -28,6 +28,11 @@ struct Article: Codable {
     let urlToImage: URL?
     let publishedAt: String?
     
+    var publishedAtDate: Date? {
+        guard let dateString = publishedAt else { return nil }
+        return ISO8601DateFormatter().date(from: dateString)
+    }
+    
     func cacheKey() -> String {
         return self.title.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "/", with: "").lowercased()
     }
