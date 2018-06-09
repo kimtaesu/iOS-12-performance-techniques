@@ -15,16 +15,7 @@ final class ArticleListViewController: UIViewController {
     
     let imageLoader = ImageLoader()
     
-    private(set) var articles: [Article]
-    
-    init(articles: [Article]) {
-        self.articles = articles
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private(set) var articles: [Article] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,15 +31,11 @@ final class ArticleListViewController: UIViewController {
     }
     
     func reloadFromAPI() {
-        if self.articles.isEmpty {
-            self.spinner.startAnimating()
-        }
-        
         // Update from network
         Network.loadArticles(q: "apple", page: 1, completion: { response in
-            response.articles.forEach({
-                DiskCache.save(model: $0, key: $0.cacheKey())
-            })
+            DiskCache.performAsync {
+                DiskCache.save(model: response, key: "Response")
+            }
             
             self.spinner.stopAnimating()
             self.articles = response.articles.sortedByPublishDate()
@@ -57,8 +44,11 @@ final class ArticleListViewController: UIViewController {
     }
     
     func reloadFromCache() {
-        self.articles = DiskCache.loadAll(type: Article.self).sortedByPublishDate()
-        self.tableView.reloadData()
+        if let response = DiskCache.load(type: ArticlesResponse.self, key: "Response") {
+            self.articles = response.articles.sortedByPublishDate()
+            self.tableView.reloadData()
+            self.spinner.stopAnimating()
+        }
     }
 }
 

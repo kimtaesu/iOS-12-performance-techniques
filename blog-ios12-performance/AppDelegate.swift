@@ -19,10 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.configureAppearance()
         
-        let articles = DiskCache.loadAll(type: Article.self)
-        
         let window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = ArticleListViewController(articles: articles)
+        let vc = ArticleListViewController()
         let nav = UINavigationController(rootViewController: vc)
         
         window.rootViewController = nav

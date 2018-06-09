@@ -10,6 +10,12 @@ import Foundation
 
 struct DiskCache {
     
+    private static let ioQueue = DispatchQueue(label: "com.disk-cache.io", qos: .utility)
+    
+    static func performAsync(_ block: @escaping () -> ()) {
+        self.ioQueue.async(execute: block)
+    }
+    
     static func save<T: Encodable>(model: T, key: String) {
         let encoder = JSONEncoder()
         do {
@@ -31,6 +37,33 @@ struct DiskCache {
         } catch let e {
             print("Disk Save Error: \(e)")
         }
+    }
+    
+    static func load<T: Decodable>(type: T.Type, key: String) -> T? {
+        do {
+            if let data = self.load(folder: "\(type)", filename: "\(key).json") {
+                let decoder = JSONDecoder()
+                return try decoder.decode(type, from: data)
+            }
+        } catch let e {
+            print("Deserialize Model Error: \(e)")
+        }
+        
+        return nil
+    }
+    
+    static func load(folder: String, filename: String) -> Data? {
+        do {
+            let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let folderURL = dirURL.appendingPathComponent(folder)
+            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+            let readURL = folderURL.appendingPathComponent(filename)
+            return try Data(contentsOf: readURL)
+        } catch let e {
+            print("Disk Load Error: \(e)")
+        }
+        
+        return nil
     }
     
     static func loadAll<T: Decodable>(type: T.Type) -> [T] {
