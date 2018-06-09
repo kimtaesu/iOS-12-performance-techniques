@@ -47,7 +47,7 @@ final class ArticleListViewController: UIViewController {
                 DiskCache.save(model: response, key: "Response")
             }
             
-            self.articles = response.articles.sortedByPublishDate()
+            self.articles = response.articles
             self.spinner.stopAnimating()
             self.tableView.reloadData()
         })
@@ -55,7 +55,7 @@ final class ArticleListViewController: UIViewController {
     
     func reloadFromCache() {
         if let response = DiskCache.load(type: ArticlesResponse.self, key: "Response") {
-            self.articles = response.articles.sortedByPublishDate()
+            self.articles = response.articles
             if self.articles.isEmpty {
                 self.spinner.stopAnimating()
             }
@@ -97,20 +97,5 @@ extension ArticleListViewController : UITableViewDelegate {
         if indexPath.row == 0 {
             os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Display Cell")
         }
-    }
-}
-
-private extension Array where Element == Article {
-    
-    func sortedByPublishDate() -> [Element] {
-        return self.sorted(by: {
-            if let d1 = $0.publishedAtDate, let d2 = $1.publishedAtDate {
-                return d1 > d2
-            } else if $0.publishedAtDate != nil {
-                return false
-            } else {
-                return true
-            }
-        })
     }
 }

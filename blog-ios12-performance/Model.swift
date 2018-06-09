@@ -20,6 +20,10 @@ struct ArticlesResponse: Codable {
             articles[i].calculateFormattedValues()
         }
     }
+    
+    mutating func filterInvalidArticles() {
+        articles = articles.filter({ $0.urlToImage != nil })
+    }
 }
 
 struct Article: Codable {
