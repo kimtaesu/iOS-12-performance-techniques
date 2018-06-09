@@ -22,7 +22,7 @@ final class ArticleCell : UITableViewCell {
         self.loadingURL = nil
     }
     
-    func configureWith(article: Article) {
+    func configureWith(article: Article, imageLoader: ImageLoader) {
         self.bodyLabel.text = article.title
         if let publishedDate = article.publishedAtDate {
             self.dateLabel.text = configuredString(using: publishedDate)
@@ -35,7 +35,7 @@ final class ArticleCell : UITableViewCell {
         
         if let url = article.urlToImage {
             self.loadingURL = url
-            ImageLoader.load(url: url, completion: { url, image in
+            imageLoader.load(url: url, completion: { url, image in
                 if url == self.loadingURL {
                     self.mediaImageView.image = image
                 }

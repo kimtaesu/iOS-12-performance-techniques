@@ -16,7 +16,7 @@ struct DiskCache {
             let data = try encoder.encode(model)
             self.save(data: data, folder: "\(type(of: model))", filename: "\(key).json")
         } catch let e {
-            print("\(e)")
+            print("Serialize Model Error: \(e)")
         }
     }
     
@@ -29,26 +29,26 @@ struct DiskCache {
             try data.write(to: writeURL)
             print("Saved to \(writeURL.absoluteString)")
         } catch let e {
-            print("\(e)")
+            print("Disk Save Error: \(e)")
         }
     }
     
     static func loadAll<T: Decodable>(type: T.Type) -> [T] {
         do {
             let decoder = JSONDecoder()
-            let models = try self.loadAll(folder: "\(type)").map({
-                try decoder.decode(type, from: $0)
+            let models = try self.loadAll(folder: "\(type)").map({ data, filename in
+                try decoder.decode(type, from: data)
             })
             
             return models
         } catch let e {
-            print("\(e)")
+            print("Deserialize Model Error: \(e)")
         }
         
         return []
     }
     
-    static func loadAll(folder: String) -> [Data] {
+    static func loadAll(folder: String) -> [(data: Data, filename: String)] {
         do {
             let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             let folderURL = dirURL.appendingPathComponent(folder)
@@ -57,17 +57,19 @@ struct DiskCache {
             let keys: [URLResourceKey] = [.isDirectoryKey]
             let paths = try FileManager.default.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: keys, options: [])
             
-            var allData: [Data] = []
+            var allData: [(data: Data, filename: String)] = []
             for path in paths {
                 if try path.resourceValues(forKeys: Set(keys)).isDirectory == false {
-                    allData.append(try Data(contentsOf: path))
+                    let data = try Data(contentsOf: path)
+                    let filename = path.lastPathComponent
+                    allData.append((data: data, filename: filename))
                     print("Loaded \(path.absoluteString)")
                 }
             }
             
             return allData
         } catch let e {
-            print("\(e)")
+            print("Disk Load Error \(e)")
         }
         
         return []

@@ -13,6 +13,8 @@ final class ArticleListViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var spinner: UIActivityIndicatorView!
     
+    let imageLoader = ImageLoader()
+    
     private(set) var articles: [Article]
     
     init(articles: [Article]) {
@@ -72,7 +74,7 @@ extension ArticleListViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
-        cell.configureWith(article: self.articles[indexPath.row])
+        cell.configureWith(article: self.articles[indexPath.row], imageLoader: self.imageLoader)
         return cell
     }
 }
