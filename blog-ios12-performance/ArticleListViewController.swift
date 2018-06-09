@@ -16,7 +16,7 @@ final class ArticleListViewController: UIViewController {
     
     let imageLoader = ImageLoader()
     
-    private(set) var articles: [Article] = []
+    var articles: [Article] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
