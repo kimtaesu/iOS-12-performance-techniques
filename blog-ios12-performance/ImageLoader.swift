@@ -14,13 +14,16 @@ final class ImageLoader {
     
     func load(url: URL, completion: @escaping (URL, UIImage?) -> ()) {
         DiskCache.performAsync {
-            if let data = DiskCache.load(folder: "Images", filename: url.cacheKey), let image = UIImage(data: data) {
+            if let data = DiskCache.load(folder: "Images", filename: url.cacheKey, ignoreErrors: true), let image = UIImage(data: data) {
+                print("Loaded cached image for \(url.absoluteString)")
                 DispatchQueue.main.async {
                     completion(url, image)
                 }
             } else {
                 self.session.dataTask(with: url, completionHandler: { data, response, error in
                     if let data = data, let image = UIImage(data: data) {
+                        print("Downloaded image for \(url.absoluteString)")
+                        
                         DiskCache.performAsync {
                             DiskCache.save(data: data, folder: "Images", filename: url.cacheKey)
                         }

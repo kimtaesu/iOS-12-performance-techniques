@@ -52,7 +52,7 @@ struct DiskCache {
         return nil
     }
     
-    static func load(folder: String, filename: String) -> Data? {
+    static func load(folder: String, filename: String, ignoreErrors: Bool = false) -> Data? {
         do {
             let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             let folderURL = dirURL.appendingPathComponent(folder)
@@ -60,7 +60,9 @@ struct DiskCache {
             let readURL = folderURL.appendingPathComponent(filename)
             return try Data(contentsOf: readURL)
         } catch let e {
-            print("Disk Load Error: \(e)")
+            if !ignoreErrors {
+                print("Disk Load Error: \(e)")
+            }
         }
         
         return nil
