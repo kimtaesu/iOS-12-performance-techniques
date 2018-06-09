@@ -18,7 +18,6 @@ class blog_ios12_performanceUITests: XCTestCase {
     func testApplicationLaunchPerformance() {
         self.measure {
             XCUIApplication().launch()
-            XCTAssertTrue(XCUIApplication().navigationBars["Top Headlines"].waitForExistence(timeout: 10.0))
         }
     }
 }
