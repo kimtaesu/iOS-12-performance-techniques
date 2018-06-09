@@ -44,7 +44,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="Pb7-mU-Oak" firstAttribute="top" secondItem="dM7-4S-Vh3" secondAttribute="top" constant="30" id="Wem-Gr-yxX"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Pb7-mU-Oak" secondAttribute="bottom" constant="30" id="Xgh-PZ-JdX"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Pb7-mU-Oak" secondAttribute="bottom" priority="999" constant="30" id="Xgh-PZ-JdX"/>
                     <constraint firstAttribute="trailing" secondItem="Pb7-mU-Oak" secondAttribute="trailing" constant="30" id="k5n-HE-Stb"/>
                     <constraint firstItem="Pb7-mU-Oak" firstAttribute="leading" secondItem="dM7-4S-Vh3" secondAttribute="leading" constant="30" id="mrr-SA-70y"/>
                 </constraints>
