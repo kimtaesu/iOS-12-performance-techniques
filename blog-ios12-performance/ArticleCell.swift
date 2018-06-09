@@ -19,7 +19,7 @@ final class ArticleCell : UITableViewCell {
     private var loadingURL: URL?
     
     func configureWith(article: Article, imageLoader: ImageLoader) {
-        self.bodyLabel.attributedText = article.nameHighlightedTitle ?? NSAttributedString(string: article.title)
+        self.bodyLabel.attributedText = article.nameHighlightedTitle
         self.dateLabel.text = article.displayDate
         
         if let url = article.urlToImage {
