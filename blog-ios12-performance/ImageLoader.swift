@@ -28,10 +28,12 @@ final class ImageLoader {
     
     func load(url: URL, completion: @escaping (URL, UIImage?) -> ()) {
         if let image = self.cache[url] {
+            print("Loaded cached image for \(url.absoluteString)")
             completion(url, image)
         } else {
             self.session.dataTask(with: url, completionHandler: { data, response, error in
                 if let data = data, let image = UIImage(data: data) {
+                    print("Downloaded image for \(url.absoluteString)")
                     self.cache[url] = image
                     DiskCache.save(data: data, folder: "Images", filename: url.cacheKey)
                     
