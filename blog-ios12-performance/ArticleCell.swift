@@ -18,12 +18,6 @@ final class ArticleCell : UITableViewCell {
     
     private var loadingURL: URL?
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.loadingURL = nil
-        self.mediaImageView.image = nil
-    }
-    
     func configureWith(article: Article, imageLoader: ImageLoader) {
         self.bodyLabel.attributedText = article.nameHighlightedTitle
         if let publishedDate = article.publishedAtDate {
@@ -32,16 +26,20 @@ final class ArticleCell : UITableViewCell {
             self.dateLabel.text = "Invalid Date"
         }
         
-        self.loadingURL = nil
-        self.mediaImageView.image = nil
-        
         if let url = article.urlToImage {
+            if self.loadingURL != url {
+                self.mediaImageView.image = nil
+            }
+            
             self.loadingURL = url
+            
             imageLoader.load(url: url, completion: { url, image in
                 if url == self.loadingURL {
                     self.mediaImageView.image = image
                 }
             })
+        } else {
+            self.mediaImageView.image = nil
         }
     }
     
