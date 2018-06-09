@@ -11,39 +11,30 @@ import UIKit
 final class ImageLoader {
     
     let session = URLSession(configuration: .ephemeral)
-    private(set) var cache: [URL : UIImage] = [:]
-    
-    init() {
-        let imageData = DiskCache.loadAll(folder: "Images")
-        
-        var cache: [URL : UIImage] = [:]
-        for (data, filename) in imageData {
-            if let url = URL.from(cacheKey: filename), let image = UIImage(data: data) {
-                cache[url] = image
-            }
-        }
-        
-        self.cache = cache
-    }
     
     func load(url: URL, completion: @escaping (URL, UIImage?) -> ()) {
-        if let image = self.cache[url] {
-            completion(url, image)
-        } else {
-            self.session.dataTask(with: url, completionHandler: { data, response, error in
-                if let data = data, let image = UIImage(data: data) {
-                    self.cache[url] = image
-                    DiskCache.save(data: data, folder: "Images", filename: url.cacheKey)
-                    
-                    DispatchQueue.main.async {
-                        completion(url, image)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        completion(url, nil)
-                    }
+        DiskCache.performAsync {
+            if let data = DiskCache.load(folder: "Images", filename: url.cacheKey), let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    completion(url, image)
                 }
-            }).resume()
+            } else {
+                self.session.dataTask(with: url, completionHandler: { data, response, error in
+                    if let data = data, let image = UIImage(data: data) {
+                        DiskCache.performAsync {
+                            DiskCache.save(data: data, folder: "Images", filename: url.cacheKey)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            completion(url, image)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(url, nil)
+                        }
+                    }
+                }).resume()
+            }
         }
     }
 }
