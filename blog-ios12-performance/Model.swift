@@ -12,8 +12,12 @@ import NaturalLanguage
 struct ArticlesResponse: Codable {
     let status: String
     let totalResults: Int
-    let articles: [Article]
+    var articles: [Article]
     var page: Int?
+    
+    mutating func filterInvalidArticles() {
+        self.articles = self.articles.filter({ $0.urlToImage != nil })
+    }
 }
 
 struct Article: Codable {

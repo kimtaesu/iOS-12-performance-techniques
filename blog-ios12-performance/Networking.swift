@@ -35,6 +35,7 @@ struct Network {
         do {
             var response = try JSONDecoder().decode(ArticlesResponse.self, from: data)
             response.page = page
+            response.filterInvalidArticles()
             return response
         } catch let e {
             print("\(e)")
