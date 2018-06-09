@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os
 
 final class ArticleListViewController: UIViewController {
     
@@ -21,6 +22,8 @@ final class ArticleListViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Top Headlines"
         self.tableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: ArticleCell.reuseID)
+        
+        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Load")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,6 +34,13 @@ final class ArticleListViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.reloadFromAPI()
+        
+        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Will Appear")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Appear")
     }
     
     func reloadFromAPI() {
@@ -71,6 +81,17 @@ extension ArticleListViewController : UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
         cell.configureWith(article: self.articles[indexPath.row], imageLoader: self.imageLoader)
         return cell
+    }
+    
+    
+}
+
+extension ArticleListViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Display Cell")
+        }
     }
 }
 

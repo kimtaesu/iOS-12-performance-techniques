@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var rootViewController: UIViewController?
     var rootNavViewController: UINavigationController?
+    
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Finish Launching")
+        return true
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -30,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.rootViewController = vc
         self.rootNavViewController = nav
         
+        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Did Finish Launching")
         return true
     }
 
