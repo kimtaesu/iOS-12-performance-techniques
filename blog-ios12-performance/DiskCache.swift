@@ -15,7 +15,9 @@ struct DiskCache {
         do {
             let data = try encoder.encode(model)
             let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let writeURL = dirURL.appendingPathComponent("\(key).json")
+            let modelURL = dirURL.appendingPathComponent("\(type(of: model))")
+            try FileManager.default.createDirectory(at: modelURL, withIntermediateDirectories: true, attributes: nil)
+            let writeURL = modelURL.appendingPathComponent("\(key).json")
             try data.write(to: writeURL)
             print("Saved \(type(of: model)) to \(writeURL.absoluteString)")
         } catch let e {
@@ -26,8 +28,11 @@ struct DiskCache {
     static func loadAll<T: Decodable>(type: T.Type) -> [T] {
         do {
             let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let readURL = dirURL.appendingPathComponent("\(type)")
+            try FileManager.default.createDirectory(at: readURL, withIntermediateDirectories: true, attributes: nil)
+            
             let keys: [URLResourceKey] = [.isDirectoryKey]
-            let paths = try FileManager.default.contentsOfDirectory(at: dirURL, includingPropertiesForKeys: keys, options: [])
+            let paths = try FileManager.default.contentsOfDirectory(at: readURL, includingPropertiesForKeys: keys, options: [])
             
             var modelData: [Data] = []
             for path in paths {
