@@ -29,17 +29,14 @@ final class ArticleListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.reloadFromCache()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.reloadFromAPI()
         
         os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Will Appear")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.reloadFromAPI()
+        
         os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Appear")
     }
     
