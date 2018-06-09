@@ -48,7 +48,6 @@ final class ArticleCell : UITableViewCell {
         let tagger = NLTagger(tagSchemes: [.nameType])
         tagger.string = title
         let range = title.startIndex ..< title.endIndex
-        tagger.setLanguage(.english, range: range)
         
         let tags = tagger.tags(in: range, unit: .word, scheme: .nameType)
         
@@ -62,7 +61,8 @@ final class ArticleCell : UITableViewCell {
     
     func configuredString(using date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .short
         return dateFormatter.string(from: date)
     }
 }
