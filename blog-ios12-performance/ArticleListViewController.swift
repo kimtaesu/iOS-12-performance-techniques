@@ -45,7 +45,7 @@ final class ArticleListViewController: UIViewController {
         }
         
         // Update from network
-        Network.loadTopHeadlines(completion: { response in
+        Network.loadArticles(q: "apple", page: 1, completion: { response in
             response.articles.forEach({
                 DiskCache.save(model: $0, key: $0.cacheKey())
             })
