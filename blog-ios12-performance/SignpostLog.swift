@@ -6,10 +6,11 @@
 //  Copyright © 2018 CapTech. All rights reserved.
 //
 
-import Foundation
 import os
 
-final class SignpostLog {
+struct SignpostLog {
     
+    static let cellForRow = OSLog(subsystem: "com.captech.blog-ios12-performance", category: "cellForRow")
     static let pointsOfInterest = OSLog(subsystem: "com.captech.blog-ios12-performance", category: OSLog.Category.pointsOfInterest)
+    
 }
