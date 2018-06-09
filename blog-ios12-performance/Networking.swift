@@ -47,7 +47,9 @@ struct Network {
             guard let response = articlesResponse(from: data) else {
                 return
             }
-            completion(response)
+            DispatchQueue.main.async {
+                completion(response)
+            }
         }.resume()
     }
     

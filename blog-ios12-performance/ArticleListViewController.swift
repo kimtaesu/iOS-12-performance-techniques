@@ -33,14 +33,11 @@ final class ArticleListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.reloadArticles()
+        self.reloadFromCache()
+        self.reloadFromAPI()
     }
     
-    func reloadArticles() {
-        // Update from cache
-        self.articles = DiskCache.loadAll(type: Article.self)
-        self.tableView.reloadData()
-        
+    func reloadFromAPI() {
         if self.articles.isEmpty {
             self.spinner.startAnimating()
         }
@@ -50,12 +47,16 @@ final class ArticleListViewController: UIViewController {
             response.articles.forEach({
                 DiskCache.save(model: $0, key: $0.cacheKey())
             })
-            DispatchQueue.main.async {
-                self.spinner.stopAnimating()
-                self.articles = response.articles
-                self.tableView.reloadData()
-            }
+            
+            self.spinner.stopAnimating()
+            self.articles = response.articles
+            self.tableView.reloadData()
         })
+    }
+    
+    func reloadFromCache() {
+        self.articles = DiskCache.loadAll(type: Article.self)
+        self.tableView.reloadData()
     }
 }
 
