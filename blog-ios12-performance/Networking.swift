@@ -8,7 +8,7 @@
 
 import Foundation
 
-private let PageSize = 100
+private let PageSize = 40
 private let APIToken = "f35e44daa6eb4c75993efd566596a3b1"
 private let BaseURL = "https://newsapi.org/v2"
 
