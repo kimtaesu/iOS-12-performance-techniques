@@ -11,6 +11,7 @@
 		C544CB3B20CC008800E743D1 /* ArticleListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C544CB3A20CC008800E743D1 /* ArticleListViewController.xib */; };
 		C544CB3E20CC026400E743D1 /* ArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544CB3C20CC026400E743D1 /* ArticleCell.swift */; };
 		C544CB3F20CC026400E743D1 /* ArticleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C544CB3D20CC026400E743D1 /* ArticleCell.xib */; };
+		C544CB4120CC194400E743D1 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544CB4020CC194400E743D1 /* Model.swift */; };
 		C5B6DA1520CB3A0500D0C585 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6DA1420CB3A0500D0C585 /* AppDelegate.swift */; };
 		C5B6DA1720CB3A0500D0C585 /* ArticleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6DA1620CB3A0500D0C585 /* ArticleListViewController.swift */; };
 		C5B6DA1C20CB3A0600D0C585 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5B6DA1B20CB3A0600D0C585 /* Assets.xcassets */; };
@@ -43,6 +44,7 @@
 		C544CB3A20CC008800E743D1 /* ArticleListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArticleListViewController.xib; sourceTree = "<group>"; };
 		C544CB3C20CC026400E743D1 /* ArticleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleCell.swift; sourceTree = "<group>"; };
 		C544CB3D20CC026400E743D1 /* ArticleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArticleCell.xib; sourceTree = "<group>"; };
+		C544CB4020CC194400E743D1 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		C5B6DA1120CB3A0500D0C585 /* blog-ios12-performance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "blog-ios12-performance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5B6DA1420CB3A0500D0C585 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5B6DA1620CB3A0500D0C585 /* ArticleListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleListViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				C544CB3C20CC026400E743D1 /* ArticleCell.swift */,
 				C544CB3D20CC026400E743D1 /* ArticleCell.xib */,
 				A0BFEDD320CB423B00208319 /* Networking.swift */,
+				C544CB4020CC194400E743D1 /* Model.swift */,
 				C5B6DA4620CB4B7600D0C585 /* DiskCache.swift */,
 				C5B6DA1B20CB3A0600D0C585 /* Assets.xcassets */,
 				C5B6DA1D20CB3A0600D0C585 /* LaunchScreen.storyboard */,
@@ -272,6 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C544CB4120CC194400E743D1 /* Model.swift in Sources */,
 				C5B6DA1720CB3A0500D0C585 /* ArticleListViewController.swift in Sources */,
 				C5B6DA1520CB3A0500D0C585 /* AppDelegate.swift in Sources */,
 				C544CB3E20CC026400E743D1 /* ArticleCell.swift in Sources */,
