@@ -21,6 +21,7 @@ final class ArticleCell : UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.loadingURL = nil
+        self.mediaImageView.image = nil
     }
     
     func configureWith(article: Article, imageLoader: ImageLoader) {
