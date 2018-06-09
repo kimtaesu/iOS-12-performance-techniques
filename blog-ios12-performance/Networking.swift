@@ -47,8 +47,11 @@ private func urlRequest(for url: URL) -> URLRequest {
 struct Network {
     
     static func loadTopHeadlines(completion: @escaping (ArticlesResponse) -> Void) {
-        let url = URL(string: "https://newsapi.org/v2/top-headlines?country=us")!
+        let url = URL(string: "https://newsapi.org/v2/everything?pageSize=100&q=apple&language=en&sortBy=publishedAt")!
         URLSession.shared.dataTask(with: urlRequest(for: url)) { (data, urlResponse, error) in
+            if let data = data, let json = String(data: data, encoding: .utf8) {
+                print(json)
+            }
             guard let response = articlesResponse(from: data) else {
                 return
             }
