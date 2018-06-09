@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NaturalLanguage
 
 final class ArticleCell : UITableViewCell {
     static let reuseID = "article_cell"
@@ -23,7 +24,7 @@ final class ArticleCell : UITableViewCell {
     }
     
     func configureWith(article: Article, imageLoader: ImageLoader) {
-        self.bodyLabel.text = article.title
+        self.bodyLabel.attributedText = self.highlightedTitle(for: article.title)
         if let publishedDate = article.publishedAtDate {
             self.dateLabel.text = configuredString(using: publishedDate)
         } else {
@@ -41,6 +42,22 @@ final class ArticleCell : UITableViewCell {
                 }
             })
         }
+    }
+    
+    func highlightedTitle(for title: String) -> NSAttributedString {
+        let tagger = NLTagger(tagSchemes: [.nameType])
+        tagger.string = title
+        let range = title.startIndex ..< title.endIndex
+        tagger.setLanguage(.english, range: range)
+        
+        let tags = tagger.tags(in: range, unit: .word, scheme: .nameType)
+        
+        let attrString = NSMutableAttributedString(string: title)
+        for (tag, tagRange) in tags where tag == NLTag.organizationName || tag == NLTag.personalName {
+            let nsRange = (title as NSString).range(of: String(title[tagRange]))
+            attrString.addAttribute(.underlineStyle, value: 1, range: nsRange)
+        }
+        return attrString
     }
     
     func configuredString(using date: Date) -> String {
