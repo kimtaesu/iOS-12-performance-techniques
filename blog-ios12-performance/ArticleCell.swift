@@ -53,7 +53,7 @@ final class ArticleCell : UITableViewCell {
         let tags = tagger.tags(in: range, unit: .word, scheme: .nameType)
         
         let attrString = NSMutableAttributedString(string: title)
-        for (tag, tagRange) in tags where tag == NLTag.organizationName || tag == NLTag.personalName {
+        for (tag, tagRange) in tags where tag == .personalName {
             let nsRange = (title as NSString).range(of: String(title[tagRange]))
             attrString.addAttribute(.underlineStyle, value: 1, range: nsRange)
         }
