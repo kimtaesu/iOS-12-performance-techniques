@@ -16,6 +16,7 @@
 		C5B6DA2A20CB3A0600D0C585 /* blog_ios12_performanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6DA2920CB3A0600D0C585 /* blog_ios12_performanceTests.swift */; };
 		C5B6DA3520CB3A0600D0C585 /* blog_ios12_performanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6DA3420CB3A0600D0C585 /* blog_ios12_performanceUITests.swift */; };
 		C5B6DA4320CB3E2B00D0C585 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6DA4220CB3E2B00D0C585 /* ImageLoader.swift */; };
+		C5B6DA4720CB4B7600D0C585 /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6DA4620CB4B7600D0C585 /* DiskCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		C5B6DA3420CB3A0600D0C585 /* blog_ios12_performanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blog_ios12_performanceUITests.swift; sourceTree = "<group>"; };
 		C5B6DA3620CB3A0600D0C585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5B6DA4220CB3E2B00D0C585 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		C5B6DA4620CB4B7600D0C585 /* DiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				C5B6DA4220CB3E2B00D0C585 /* ImageLoader.swift */,
 				C5B6DA1620CB3A0500D0C585 /* ArticleListViewController.swift */,
 				A0BFEDD320CB423B00208319 /* Networking.swift */,
+				C5B6DA4620CB4B7600D0C585 /* DiskCache.swift */,
 				C5B6DA1820CB3A0500D0C585 /* Main.storyboard */,
 				C5B6DA1B20CB3A0600D0C585 /* Assets.xcassets */,
 				C5B6DA1D20CB3A0600D0C585 /* LaunchScreen.storyboard */,
@@ -266,6 +269,7 @@
 				C5B6DA1520CB3A0500D0C585 /* AppDelegate.swift in Sources */,
 				C5B6DA4320CB3E2B00D0C585 /* ImageLoader.swift in Sources */,
 				A0BFEDD420CB423B00208319 /* Networking.swift in Sources */,
+				C5B6DA4720CB4B7600D0C585 /* DiskCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

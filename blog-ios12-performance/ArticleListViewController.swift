@@ -15,6 +15,13 @@ final class ArticleListViewController: UIViewController {
     
     var articles: [Article] = []
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.articles = DiskCache.loadAll(type: Article.self)
+        self.tableView.reloadData()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -23,15 +30,16 @@ final class ArticleListViewController: UIViewController {
     
     func reloadArticles() {
         if self.articles.isEmpty {
-            self.tableView.isHidden = true
             self.spinner.startAnimating()
         }
         Network.loadTopHeadlines(completion: { response in
+            response.articles.forEach({
+                DiskCache.save(model: $0, key: $0.cacheKey())
+            })
             DispatchQueue.main.async {
                 self.spinner.stopAnimating()
                 self.articles = response.articles
                 self.tableView.reloadData()
-                self.tableView.isHidden = false
             }
         })
     }
@@ -69,7 +77,7 @@ final class ArticleCell : UITableViewCell {
     }
     
     func configureWith(article: Article) {
-        self.bodyLabel.text = article.description
+        self.bodyLabel.text = article.title
         self.dateLabel.text = article.publishedAt
         
         self.loadingURL = nil
