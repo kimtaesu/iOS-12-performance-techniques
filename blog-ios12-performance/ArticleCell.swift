@@ -19,12 +19,8 @@ final class ArticleCell : UITableViewCell {
     private var loadingURL: URL?
     
     func configureWith(article: Article, imageLoader: ImageLoader) {
-        self.bodyLabel.attributedText = article.nameHighlightedTitle
-        if let publishedDate = article.publishedAtDate {
-            self.dateLabel.text = configuredString(using: publishedDate)
-        } else {
-            self.dateLabel.text = "Invalid Date"
-        }
+        self.bodyLabel.attributedText = article.nameHighlightedTitle ?? NSAttributedString(string: article.title)
+        self.dateLabel.text = article.displayDate
         
         if let url = article.urlToImage {
             if self.loadingURL != url {
@@ -41,12 +37,5 @@ final class ArticleCell : UITableViewCell {
         } else {
             self.mediaImageView.image = nil
         }
-    }
-    
-    func configuredString(using date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .short
-        return dateFormatter.string(from: date)
     }
 }

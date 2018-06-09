@@ -24,6 +24,7 @@ struct Network {
             guard let response = articlesResponse(from: data, page: page) else {
                 return
             }
+            
             DispatchQueue.main.async {
                 completion(response)
             }
@@ -35,6 +36,7 @@ struct Network {
         do {
             var response = try JSONDecoder().decode(ArticlesResponse.self, from: data)
             response.page = page
+            response.formatArticles()
             return response
         } catch let e {
             print("\(e)")

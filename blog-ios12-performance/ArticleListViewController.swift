@@ -78,12 +78,13 @@ extension ArticleListViewController : UITableViewDataSource {
         let uuid = UUID.ReferenceType()
         let article = self.articles[indexPath.row]
         
-        os_signpost(type: .begin, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid), "Title: %@", article.title)
+        let articleString = article.stringRepresentation()
+        os_signpost(type: .begin, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid), "%@", articleString)
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
         cell.configureWith(article: article, imageLoader: self.imageLoader)
         
-        os_signpost(type: .end, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid), "Title: %@", article.title)
+        os_signpost(type: .end, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid))
         
         return cell
     }

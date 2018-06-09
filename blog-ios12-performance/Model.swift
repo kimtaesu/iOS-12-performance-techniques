@@ -12,11 +12,27 @@ import NaturalLanguage
 struct ArticlesResponse: Codable {
     let status: String
     let totalResults: Int
-    let articles: [Article]
+    private(set) var articles: [Article]
     var page: Int?
+    
+    mutating func formatArticles() {
+        for (i, _) in articles.enumerated() {
+            articles[i].calculateFormattedValues()
+        }
+    }
 }
 
 struct Article: Codable {
+    
+    static let nameTagger = NLTagger(tagSchemes: [.nameType])
+    static let isoDateFormatter = ISO8601DateFormatter()
+    static let displayDateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .long
+        df.timeStyle = .short
+        return df
+    }()
+    
     struct Source: Codable {
         let id: String?
         let name: String
@@ -30,27 +46,54 @@ struct Article: Codable {
     let urlToImage: URL?
     let publishedAt: String?
     
-    var publishedAtDate: Date? {
-        guard let dateString = publishedAt else { return nil }
-        return ISO8601DateFormatter().date(from: dateString)
-    }
+    private(set) var publishedAtDate: Date?
     
-    var nameHighlightedTitle: NSAttributedString {
-        let tagger = NLTagger(tagSchemes: [.nameType])
-        tagger.string = title
+    private(set) var displayDate: String?
+    
+    private(set) var nameHighlightedTitle: NSAttributedString?
+    
+    /// Not thread-safe!
+    mutating func calculateFormattedValues() {
+        // Date formatting
+        if let dateString = publishedAt, let date = Article.isoDateFormatter.date(from: dateString) {
+            publishedAtDate = date
+            displayDate = Article.displayDateFormatter.string(from: date)
+        }
+        
+        // NLP
+        Article.nameTagger.string = title
         let range = title.startIndex ..< title.endIndex
         
-        let tags = tagger.tags(in: range, unit: .word, scheme: .nameType)
+        let tags = Article.nameTagger.tags(in: range, unit: .word, scheme: .nameType)
         
         let attrString = NSMutableAttributedString(string: title)
         for (tag, tagRange) in tags where tag == .personalName {
             let nsRange = (title as NSString).range(of: String(title[tagRange]))
             attrString.addAttribute(.underlineStyle, value: 1, range: nsRange)
         }
-        return attrString
+        nameHighlightedTitle = attrString
     }
     
     func cacheKey() -> String {
         return self.title.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "/", with: "").lowercased()
+    }
+    
+    func stringRepresentation() -> String {
+        guard let data = try? JSONEncoder().encode(self), let string = String(data: data, encoding: .utf8) else {
+            return "Invalid"
+        }
+        return string
+    }
+}
+
+extension Article {
+    enum CodingKeys: String, CodingKey {
+        case source
+        case author
+        case title
+        case description
+        case url
+        case urlToImage
+        case publishedAt
     }
 }
