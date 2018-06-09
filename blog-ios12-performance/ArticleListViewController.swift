@@ -56,7 +56,7 @@ final class ArticleListViewController: UIViewController {
     func reloadFromCache() {
         if let response = DiskCache.load(type: ArticlesResponse.self, key: "Response") {
             self.articles = response.articles
-            if self.articles.isEmpty {
+            if !self.articles.isEmpty {
                 self.spinner.stopAnimating()
             }
             self.tableView.reloadData()
