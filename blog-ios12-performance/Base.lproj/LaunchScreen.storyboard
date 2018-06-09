@@ -25,16 +25,11 @@ Headlines</string>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Gz2-bx-QUl">
-                                <rect key="frame" x="169" y="349.5" width="37" height="37"/>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.031372549019607843" green="0.64313725490196072" blue="0.49226464023109245" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="zvO-uM-MyO" secondAttribute="trailing" constant="30" id="BwC-JP-d57"/>
-                            <constraint firstItem="Gz2-bx-QUl" firstAttribute="top" secondItem="zvO-uM-MyO" secondAttribute="bottom" constant="20" id="E5O-t6-ztE"/>
                             <constraint firstItem="zvO-uM-MyO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="bWu-kR-hif"/>
-                            <constraint firstItem="Gz2-bx-QUl" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="gIb-aI-1uB"/>
                             <constraint firstItem="zvO-uM-MyO" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-40" id="yni-Ii-N0p"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
