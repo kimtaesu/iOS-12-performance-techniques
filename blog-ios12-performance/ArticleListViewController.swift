@@ -51,13 +51,13 @@ final class ArticleListViewController: UIViewController {
             })
             
             self.spinner.stopAnimating()
-            self.articles = response.articles
+            self.articles = response.articles.sortedByPublishDate()
             self.tableView.reloadData()
         })
     }
     
     func reloadFromCache() {
-        self.articles = DiskCache.loadAll(type: Article.self)
+        self.articles = DiskCache.loadAll(type: Article.self).sortedByPublishDate()
         self.tableView.reloadData()
     }
 }
@@ -76,5 +76,20 @@ extension ArticleListViewController : UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
         cell.configureWith(article: self.articles[indexPath.row], imageLoader: self.imageLoader)
         return cell
+    }
+}
+
+private extension Array where Element == Article {
+    
+    func sortedByPublishDate() -> [Element] {
+        return self.sorted(by: {
+            if let d1 = $0.publishedAtDate, let d2 = $1.publishedAtDate {
+                return d1 < d2
+            } else if $1.publishedAtDate != nil {
+                return false
+            } else {
+                return true
+            }
+        })
     }
 }
