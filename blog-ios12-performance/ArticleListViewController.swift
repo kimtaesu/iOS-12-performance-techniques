@@ -25,8 +25,11 @@ final class ArticleListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.reloadFromCache()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.reloadFromAPI()
     }
     
@@ -37,8 +40,8 @@ final class ArticleListViewController: UIViewController {
                 DiskCache.save(model: response, key: "Response")
             }
             
-            self.spinner.stopAnimating()
             self.articles = response.articles.sortedByPublishDate()
+            self.spinner.stopAnimating()
             self.tableView.reloadData()
         })
     }
@@ -46,8 +49,10 @@ final class ArticleListViewController: UIViewController {
     func reloadFromCache() {
         if let response = DiskCache.load(type: ArticlesResponse.self, key: "Response") {
             self.articles = response.articles.sortedByPublishDate()
+            if self.articles.isEmpty {
+                self.spinner.stopAnimating()
+            }
             self.tableView.reloadData()
-            self.spinner.stopAnimating()
         }
     }
 }
