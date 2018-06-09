@@ -84,8 +84,8 @@ private extension Array where Element == Article {
     func sortedByPublishDate() -> [Element] {
         return self.sorted(by: {
             if let d1 = $0.publishedAtDate, let d2 = $1.publishedAtDate {
-                return d1 < d2
-            } else if $1.publishedAtDate != nil {
+                return d1 > d2
+            } else if $0.publishedAtDate != nil {
                 return false
             } else {
                 return true
