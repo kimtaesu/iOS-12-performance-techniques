@@ -14,12 +14,20 @@ struct DiskCache {
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(model)
+            self.save(data: data, folder: "\(type(of: model))", filename: "\(key).json")
+        } catch let e {
+            print("\(e)")
+        }
+    }
+    
+    static func save(data: Data, folder: String, filename: String) {
+        do {
             let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let modelURL = dirURL.appendingPathComponent("\(type(of: model))")
-            try FileManager.default.createDirectory(at: modelURL, withIntermediateDirectories: true, attributes: nil)
-            let writeURL = modelURL.appendingPathComponent("\(key).json")
+            let folderURL = dirURL.appendingPathComponent(folder)
+            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+            let writeURL = folderURL.appendingPathComponent(filename)
             try data.write(to: writeURL)
-            print("Saved \(type(of: model)) to \(writeURL.absoluteString)")
+            print("Saved to \(writeURL.absoluteString)")
         } catch let e {
             print("\(e)")
         }
@@ -27,27 +35,37 @@ struct DiskCache {
     
     static func loadAll<T: Decodable>(type: T.Type) -> [T] {
         do {
-            let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let readURL = dirURL.appendingPathComponent("\(type)")
-            try FileManager.default.createDirectory(at: readURL, withIntermediateDirectories: true, attributes: nil)
-            
-            let keys: [URLResourceKey] = [.isDirectoryKey]
-            let paths = try FileManager.default.contentsOfDirectory(at: readURL, includingPropertiesForKeys: keys, options: [])
-            
-            var modelData: [Data] = []
-            for path in paths {
-                if try path.resourceValues(forKeys: Set(keys)).isDirectory == false {
-                    modelData.append(try Data(contentsOf: path))
-                    print("Loaded \(type) from \(path.absoluteString)")
-                }
-            }
-            
             let decoder = JSONDecoder()
-            let models = try modelData.map({
+            let models = try self.loadAll(folder: "\(type)").map({
                 try decoder.decode(type, from: $0)
             })
             
             return models
+        } catch let e {
+            print("\(e)")
+        }
+        
+        return []
+    }
+    
+    static func loadAll(folder: String) -> [Data] {
+        do {
+            let dirURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let folderURL = dirURL.appendingPathComponent(folder)
+            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+            
+            let keys: [URLResourceKey] = [.isDirectoryKey]
+            let paths = try FileManager.default.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: keys, options: [])
+            
+            var allData: [Data] = []
+            for path in paths {
+                if try path.resourceValues(forKeys: Set(keys)).isDirectory == false {
+                    allData.append(try Data(contentsOf: path))
+                    print("Loaded \(path.absoluteString)")
+                }
+            }
+            
+            return allData
         } catch let e {
             print("\(e)")
         }
