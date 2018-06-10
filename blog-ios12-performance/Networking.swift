@@ -34,10 +34,10 @@ struct Network {
     private static func articlesResponse(from data: Data?, page: Int) -> ArticlesResponse? {
         guard let data = data else { return nil }
         do {
-            var response = try JSONDecoder().decode(ArticlesResponse.self, from: data)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            var response = try decoder.decode(ArticlesResponse.self, from: data)
             response.page = page
-            response.filterInvalidArticles()
-            response.formatArticles()
             return response
         } catch let e {
             print("\(e)")

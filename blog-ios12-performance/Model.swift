@@ -10,26 +10,29 @@ import Foundation
 import NaturalLanguage
 
 struct ArticlesResponse: Codable {
-    let status: String
     let totalResults: Int
-    private(set) var articles: [Article]
+    let articles: [Article]
     var page: Int?
     
-    mutating func formatArticles() {
-        for (i, _) in articles.enumerated() {
-            articles[i].calculateFormattedValues()
-        }
+    enum CodingKeys: String, CodingKey {
+        case totalResults
+        case articles
+        case page
     }
     
-    mutating func filterInvalidArticles() {
-        articles = articles.filter({ $0.urlToImage != nil })
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.totalResults = try container.decode(Int.self, forKey: CodingKeys.totalResults)
+        self.page = try container.decodeIfPresent(Int.self, forKey: CodingKeys.page)
+        
+        let articles = try container.decode([Article].self, forKey: CodingKeys.articles)
+        self.articles = articles.filter({ $0.urlToImage != nil })
     }
 }
 
 struct Article: Codable {
     
     static let nameTagger = NLTagger(tagSchemes: [.nameType])
-    static let isoDateFormatter = ISO8601DateFormatter()
     static let displayDateFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateStyle = .long
@@ -37,34 +40,35 @@ struct Article: Codable {
         return df
     }()
     
-    struct Source: Codable {
-        let id: String?
-        let name: String
+    let title: String
+    let urlToImage: URL?
+    let publishedAt: Date?
+    
+    let displayDate: String?
+    let nameHighlightedTitle: NSAttributedString?
+    
+    enum CodingKeys: String, CodingKey {
+        case title
+        case urlToImage
+        case publishedAt
     }
     
-    let source: Source
-    let author: String?
-    let title: String
-    let description: String?
-    let url: URL?
-    let urlToImage: URL?
-    let publishedAt: String?
-    
-    private(set) var publishedAtDate: Date?
-    
-    private(set) var displayDate: String?
-    
-    private(set) var nameHighlightedTitle: NSAttributedString?
-    
-    /// Not thread-safe!
-    mutating func calculateFormattedValues() {
-        // Date formatting
-        if let dateString = publishedAt, let date = Article.isoDateFormatter.date(from: dateString) {
-            publishedAtDate = date
-            displayDate = Article.displayDateFormatter.string(from: date)
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let title = try container.decode(String.self, forKey: CodingKeys.title)
+        self.title = title
+        
+        self.urlToImage = try container.decodeIfPresent(URL.self, forKey: CodingKeys.urlToImage)
+        
+        let publishedAt = try container.decodeIfPresent(Date.self, forKey: CodingKeys.publishedAt)
+        self.publishedAt = publishedAt
+        
+        if let date = publishedAt {
+            self.displayDate = Article.displayDateFormatter.string(from: date)
+        } else {
+            self.displayDate = nil
         }
         
-        // NLP
         Article.nameTagger.string = title
         let range = title.startIndex ..< title.endIndex
         
@@ -75,22 +79,10 @@ struct Article: Codable {
             let nsRange = (title as NSString).range(of: String(title[tagRange]))
             attrString.addAttribute(.underlineStyle, value: 1, range: nsRange)
         }
-        nameHighlightedTitle = attrString
+        self.nameHighlightedTitle = attrString
     }
     
     func cacheKey() -> String {
         return self.title.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "/", with: "").lowercased()
-    }
-}
-
-extension Article {
-    enum CodingKeys: String, CodingKey {
-        case source
-        case author
-        case title
-        case description
-        case url
-        case urlToImage
-        case publishedAt
     }
 }
