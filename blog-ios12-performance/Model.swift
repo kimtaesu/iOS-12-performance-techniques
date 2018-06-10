@@ -32,7 +32,6 @@ struct ArticlesResponse: Codable {
 
 struct Article: Codable {
     
-    static let nameTagger = NLTagger(tagSchemes: [.nameType])
     static let displayDateFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateStyle = .long
@@ -64,15 +63,16 @@ struct Article: Codable {
         self.publishedAt = publishedAt
         
         if let date = publishedAt {
-            self.displayDate = Article.displayDateFormatter.string(from: date)
+            self.displayDate = Thread.current.cachedDateFormatter().string(from: date)
         } else {
             self.displayDate = nil
         }
         
-        Article.nameTagger.string = title
+        let tagger = Thread.current.cachedTagger()
+        tagger.string = title
         let range = title.startIndex ..< title.endIndex
         
-        let tags = Article.nameTagger.tags(in: range, unit: .word, scheme: .nameType)
+        let tags = tagger.tags(in: range, unit: .word, scheme: .nameType)
         
         let attrString = NSMutableAttributedString(string: title)
         for (tag, tagRange) in tags where tag == .personalName {
@@ -84,5 +84,32 @@ struct Article: Codable {
     
     func cacheKey() -> String {
         return self.title.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "/", with: "").lowercased()
+    }
+}
+
+private extension Thread {
+    
+    func cachedTagger() -> NLTagger {
+        let key = "Article.tagger"
+        if let tagger = self.threadDictionary[key] as? NLTagger {
+            return tagger
+        }
+        
+        let tagger = NLTagger(tagSchemes: [.nameType])
+        self.threadDictionary[key] = tagger
+        return tagger
+    }
+    
+    func cachedDateFormatter() -> DateFormatter {
+        let key = "Article.dateFormatter"
+        if let df = self.threadDictionary[key] as? DateFormatter {
+            return df
+        }
+        
+        let df = DateFormatter()
+        df.dateStyle = .long
+        df.timeStyle = .short
+        self.threadDictionary[key] = df
+        return df
     }
 }
