@@ -24,17 +24,16 @@ class blog_ios12_performanceTests: XCTestCase {
         }
     }
     
-    let dummyArticle: Article =
-        Article(
-            source: Article.Source(id: nil, name: "nothing"),
-            author: "CapTech Consulting",
-            title: "This App Works Great",
-            description: nil,
-            url: nil,
-            urlToImage: nil,
-            publishedAt: "2018-06-09T18:48:00Z",
-            publishedAtDate: nil,
-            displayDate: nil,
-            nameHighlightedTitle: nil
-        )
+    let dummyArticle: Article = {
+        let dummyArticleData =
+        """
+        {
+            "title": "This App Works Great",
+            "urlToImage": null,
+            "publishedAt": null,
+        }
+        """.data(using: .utf8)!
+        
+        return try! JSONDecoder().decode(Article.self, from: dummyArticleData)
+    }()
 }
