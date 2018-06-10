@@ -47,13 +47,9 @@ struct Article: Codable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let title = try container.decode(String.self, forKey: CodingKeys.title)
-        self.title = title
-        
+        self.title = try container.decode(String.self, forKey: CodingKeys.title)
         self.urlToImage = try container.decodeIfPresent(URL.self, forKey: CodingKeys.urlToImage)
-        
-        let publishedAt = try container.decodeIfPresent(Date.self, forKey: CodingKeys.publishedAt)
-        self.publishedAt = publishedAt
+        self.publishedAt = try container.decodeIfPresent(Date.self, forKey: CodingKeys.publishedAt)
         
         if let date = publishedAt {
             self.displayDate = Thread.current.cachedDateFormatter().string(from: date)
@@ -62,6 +58,10 @@ struct Article: Codable {
         }
         
         let tagger = Thread.current.cachedTagger()
+        self.nameHighlightedTitle = Article.getNameHighlightedTitle(tagger: tagger, title: title)
+    }
+    
+    private static func getNameHighlightedTitle(tagger: NLTagger, title: String) -> NSAttributedString {
         tagger.string = title
         let range = title.startIndex ..< title.endIndex
         
@@ -72,7 +72,7 @@ struct Article: Codable {
             let nsRange = (title as NSString).range(of: String(title[tagRange]))
             attrString.addAttribute(.underlineStyle, value: 1, range: nsRange)
         }
-        self.nameHighlightedTitle = attrString
+        return attrString
     }
     
     func cacheKey() -> String {
