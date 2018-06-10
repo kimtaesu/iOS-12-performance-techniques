@@ -43,23 +43,29 @@ final class ArticleListViewController: UIViewController {
     func reloadFromAPI() {
         // Update from network
         Network.loadArticles(q: "apple", page: 1, completion: { response in
-            DiskCache.performAsync {
-                DiskCache.save(model: response, key: "Response")
-            }
-            
             self.articles = response.articles
             self.spinner.stopAnimating()
             self.tableView.reloadData()
+            
+            DiskCache.performAsync {
+                DiskCache.save(model: response, key: "Response")
+            }
         })
     }
     
     func reloadFromCache() {
-        if let response = DiskCache.load(type: ArticlesResponse.self, key: "Response") {
-            self.articles = response.articles
-            if !self.articles.isEmpty {
-                self.spinner.stopAnimating()
+        DiskCache.performAsync {
+            if let response = DiskCache.load(type: ArticlesResponse.self, key: "Response") {
+                DispatchQueue.main.async {
+                    if self.spinner.isAnimating {
+                        self.articles = response.articles
+                        if !self.articles.isEmpty {
+                            self.spinner.stopAnimating()
+                        }
+                        self.tableView.reloadData()
+                    }
+                }
             }
-            self.tableView.reloadData()
         }
     }
 }
