@@ -15,15 +15,7 @@ final class ImageLoader {
     
     init() {
         let imageData = DiskCache.loadAll(folder: "Images")
-        
-        var cache: [URL : UIImage] = [:]
-        for (data, filename) in imageData {
-            if let url = URL.from(cacheKey: filename), let image = UIImage(data: data) {
-                cache[url] = image
-            }
-        }
-        
-        self.cache = cache
+        self.cache = ImageLoader.convertToCache(imageData)
     }
     
     func load(url: URL, completion: @escaping (URL, UIImage?) -> ()) {
@@ -47,6 +39,16 @@ final class ImageLoader {
                 }
             }).resume()
         }
+    }
+    
+    private static func convertToCache(_ input: [(data: Data, filename: String)]) -> [URL : UIImage] {
+        var cache: [URL : UIImage] = [:]
+        for (data, filename) in input {
+            if let url = URL.from(cacheKey: filename), let image = UIImage(data: data) {
+                cache[url] = image
+            }
+        }
+        return cache
     }
 }
 
