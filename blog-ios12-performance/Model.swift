@@ -47,16 +47,20 @@ struct Article: Codable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decode Values
         self.title = try container.decode(String.self, forKey: CodingKeys.title)
         self.urlToImage = try container.decodeIfPresent(URL.self, forKey: CodingKeys.urlToImage)
         self.publishedAt = try container.decodeIfPresent(Date.self, forKey: CodingKeys.publishedAt)
         
+        // Date Formatting
         if let date = publishedAt {
             self.displayDate = Thread.current.cachedDateFormatter().string(from: date)
         } else {
             self.displayDate = nil
         }
         
+        // Natural Language Processing
         let tagger = Thread.current.cachedTagger()
         self.nameHighlightedTitle = Article.getNameHighlightedTitle(tagger: tagger, title: title)
     }
