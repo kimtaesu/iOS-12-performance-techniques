@@ -32,13 +32,6 @@ struct ArticlesResponse: Codable {
 
 struct Article: Codable {
     
-    static let displayDateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .long
-        df.timeStyle = .short
-        return df
-    }()
-    
     let title: String
     let urlToImage: URL?
     let publishedAt: Date?
