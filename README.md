@@ -5,7 +5,7 @@
 
 Sample News app to demonstrate performance optimization techniques on iOS 12.
 
-<img src="app_home.png" height="300"></img>
+<img src="app_home.png" height="500"></img>
 
 See the `before` branch for the original app, and the `after` branch for the new app after applying performance optimizations.
 
