@@ -11,32 +11,38 @@ import UIKit
 final class ImageLoader {
     
     let session = URLSession(configuration: .ephemeral)
+    private var cache: [URL : UIImage] = [:]
     
     func load(url: URL, completion: @escaping (URL, UIImage?) -> ()) {
-        DiskCache.performAsync {
-            if let data = DiskCache.load(folder: "Images", filename: url.cacheKey, ignoreErrors: true), let image = UIImage(data: data) {
-                print("Loaded cached image for \(url.absoluteString)")
-                DispatchQueue.main.async {
-                    completion(url, image)
-                }
-            } else {
-                self.session.dataTask(with: url, completionHandler: { data, response, error in
-                    if let data = data, let image = UIImage(data: data) {
-                        print("Downloaded image for \(url.absoluteString)")
-                        
-                        DiskCache.performAsync {
-                            DiskCache.save(data: data, folder: "Images", filename: url.cacheKey)
-                        }
-                        
-                        DispatchQueue.main.async {
-                            completion(url, image)
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            completion(url, nil)
-                        }
+        if let image = self.cache[url] {
+            completion(url, image)
+        } else {
+            DiskCache.performAsync {
+                if let data = DiskCache.load(folder: "Images", filename: url.cacheKey, ignoreErrors: true), let image = UIImage(data: data) {
+                    print("Loaded cached image for \(url.absoluteString)")
+                    DispatchQueue.main.async {
+                        self.cache[url] = image
+                        completion(url, image)
                     }
-                }).resume()
+                } else {
+                    self.session.dataTask(with: url, completionHandler: { data, response, error in
+                        if let data = data, let image = UIImage(data: data) {
+                            print("Downloaded image for \(url.absoluteString)")
+                            
+                            DiskCache.performAsync {
+                                DiskCache.save(data: data, folder: "Images", filename: url.cacheKey)
+                            }
+                            
+                            DispatchQueue.main.async {
+                                completion(url, image)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                completion(url, nil)
+                            }
+                        }
+                    }).resume()
+                }
             }
         }
     }
