@@ -16,6 +16,7 @@ class blog_ios12_performanceTests: XCTestCase {
         
         articlesVC.articles = [dummyArticle]
         
+        // We have to make this table view and register a cell, otherwise our cellForRowAt function will crash!
         let dummyTableView = UITableView()
         dummyTableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: ArticleCell.reuseID)
         
