@@ -81,13 +81,6 @@ struct Article: Codable {
     func cacheKey() -> String {
         return self.title.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "/", with: "").lowercased()
     }
-    
-    func stringRepresentation() -> String {
-        guard let data = try? JSONEncoder().encode(self), let string = String(data: data, encoding: .utf8) else {
-            return "Invalid"
-        }
-        return string
-    }
 }
 
 extension Article {
