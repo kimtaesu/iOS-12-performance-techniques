@@ -23,21 +23,21 @@ final class ArticleListViewController: UIViewController {
         self.title = "Top Headlines"
         self.tableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: ArticleCell.reuseID)
         
-        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Load")
+        os_signpost(OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Load")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.reloadFromCache()
         
-        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Will Appear")
+        os_signpost(OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Will Appear")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.reloadFromAPI()
         
-        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Appear")
+        os_signpost(OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "View Did Appear")
     }
     
     func reloadFromAPI() {
@@ -84,12 +84,13 @@ extension ArticleListViewController : UITableViewDataSource {
         let uuid = UUID.ReferenceType()
         let article = self.articles[indexPath.row]
         
-        os_signpost(type: .begin, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid), "%@", article.title)
+        let sId = OSSignpostID(log: SignpostLog.cellForRow, object: uuid)
+        os_signpost(.begin, dso: "SignpostLog.cellForRow", log: SignpostLog.cellForRow, name: "SignpostLog.cellForRow", signpostID: sId, "%s", article.title)
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
         cell.configureWith(article: article, imageLoader: self.imageLoader)
         
-        os_signpost(type: .end, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid))
+        os_signpost(.end, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid))
         
         return cell
     }
@@ -100,7 +101,7 @@ extension ArticleListViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Display Cell")
+            os_signpost(OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Display Cell")
         }
     }
 }

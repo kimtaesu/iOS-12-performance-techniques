@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var rootNavViewController: UINavigationController?
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Finish Launching")
+        os_signpost(OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Will Finish Launching")
         return true
     }
 
@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.rootViewController = vc
         self.rootNavViewController = nav
         
-        os_signpost(type: OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Did Finish Launching")
+        os_signpost(OSSignpostType.event, log: SignpostLog.pointsOfInterest, name: "Did Finish Launching")
         return true
     }
 
