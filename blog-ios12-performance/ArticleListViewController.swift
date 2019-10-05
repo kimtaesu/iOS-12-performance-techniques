@@ -81,18 +81,30 @@ extension ArticleListViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let uuid = UUID.ReferenceType()
         let article = self.articles[indexPath.row]
+
         
-        let sId = OSSignpostID(log: SignpostLog.cellForRow, object: uuid)
-        os_signpost(.begin, dso: "SignpostLog.cellForRow", log: SignpostLog.cellForRow, name: "SignpostLog.cellForRow", signpostID: sId, "%s", article.title)
+        os_signpost(
+            OSSignpostType.begin,
+            log: SignpostLog.networking,
+            name: "Background Image",
+            signpostID: OSSignpostID(log: SignpostLog.networking, object: self.imageLoader), "Image name:%{pulbic}@", article.title
+        )
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ArticleCell.reuseID, for: indexPath) as! ArticleCell
         cell.configureWith(article: article, imageLoader: self.imageLoader)
-        
-        os_signpost(.end, log: SignpostLog.cellForRow, name: "Configure Cell", signpostID: OSSignpostID(log: SignpostLog.cellForRow, object: uuid))
-        
+                
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let article = self.articles[indexPath.row]
+                os_signpost(
+            OSSignpostType.end,
+            log: SignpostLog.networking,
+            name: "Background Image",
+            signpostID: OSSignpostID(log: SignpostLog.networking), "Cancelled Image name:%{pulbic}@", article.title
+        )
     }
     
 }

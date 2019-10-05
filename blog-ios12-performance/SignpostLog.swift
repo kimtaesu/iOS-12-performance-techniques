@@ -11,6 +11,7 @@ import os
 struct SignpostLog {
     
     static let cellForRow = OSLog(subsystem: "com.captech.blog-ios12-performance", category: "cellForRow")
+    static let networking = OSLog(subsystem: "com.captech.blog-ios12-performance", category: "networking")
     static let pointsOfInterest = OSLog(subsystem: "com.captech.blog-ios12-performance", category: OSLog.Category.pointsOfInterest)
     
 }

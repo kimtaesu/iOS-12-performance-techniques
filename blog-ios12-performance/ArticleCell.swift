@@ -8,6 +8,7 @@
 
 import UIKit
 import NaturalLanguage
+import os.signpost
 
 final class ArticleCell : UITableViewCell {
     static let reuseID = "article_cell"
@@ -32,10 +33,18 @@ final class ArticleCell : UITableViewCell {
             imageLoader.load(url: url, completion: { url, image in
                 if url == self.loadingURL {
                     self.mediaImageView.image = image
+                    
+                    let sId = OSSignpostID(log: SignpostLog.networking, object: imageLoader)
+                    os_signpost(
+                        .end,
+                        log: SignpostLog.networking,
+                        name: "Background Image",
+                        signpostID: sId, "Finished with size %{xcode:size-in-bytes}llu", article.title)
                 }
             })
         } else {
             self.mediaImageView.image = nil
         }
     }
+    
 }
